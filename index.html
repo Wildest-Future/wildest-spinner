@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Idea Spinner</title>
+  <style>
+    /* === WF Design Studio — Velvet Teal === */
+    :root {
+      --primary-700: #112627;
+      --primary-500: #224749;
+      --primary-400: #2B5759;
+      --primary-300: #356769;
+      --primary-100: #BBC8C9;
+      --secondary: #8E9370;
+      --accent-1: #A67C52;
+      --accent-2: #8B504C;
+      --olive-deep: #6E744F;
+      --paper: #FAF4DD;
+      --stone: #EEE8D2;
+      --ink: #282413;
+      --hover-teal: #193638;
+      --active-teal: #112627;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background-color: var(--primary-500);
+      color: var(--paper);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    /* === Shared === */
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 10vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: #fff;
+    }
+
+    .tagline {
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      font-weight: 400;
+      color: var(--paper);
+      opacity: 0.9;
+      line-height: 1.5;
+      max-width: 28ch;
+    }
+
+    /* === Buttons === */
+    .btn {
+      padding: 1.2rem 3.5rem;
+      font-size: clamp(1.3rem, 4vw, 1.6rem);
+      font-weight: 700;
+      color: #fff;
+      background-color: var(--olive-deep);
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn:hover {
+      background-color: #5d6343;
+      transform: scale(1.04);
+    }
+
+    .btn:active {
+      background-color: #4d5336;
+      transform: scale(0.98);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--paper);
+      outline-offset: 4px;
+    }
+
+    .btn.pulse {
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    .btn-secondary {
+      padding: 0.9rem 2.5rem;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      font-weight: 600;
+      color: var(--paper);
+      background: transparent;
+      border: 2px solid var(--paper);
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(250, 244, 221, 0.1);
+      transform: scale(1.04);
+    }
+
+    .btn-secondary:active {
+      background-color: rgba(250, 244, 221, 0.15);
+      transform: scale(0.98);
+    }
+
+    .btn-secondary:focus-visible {
+      outline: 3px solid var(--paper);
+      outline-offset: 4px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(110, 116, 79, 0.5); }
+      50% { box-shadow: 0 0 0 14px rgba(110, 116, 79, 0); }
+    }
+
+    /* === Step Progress Dots === */
+    .step-dots {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--primary-300);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .step-dot.filled {
+      background-color: var(--accent-1);
+      transform: scale(1.15);
+    }
+
+    .step-dot.current {
+      background-color: var(--paper);
+      transform: scale(1.25);
+    }
+
+    /* === Prompt area (shared) === */
+    .step-label {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      font-weight: 500;
+      color: var(--primary-100);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .prompt-box {
+      min-height: 7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .prompt-text {
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      max-width: 22ch;
+    }
+
+    .shuffle-btn {
+      background: none;
+      border: none;
+      color: var(--accent-1);
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      transition: color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .shuffle-btn:hover {
+      color: var(--paper);
+      background-color: rgba(250, 244, 221, 0.08);
+    }
+
+    .shuffle-btn:focus-visible {
+      outline: 2px solid var(--accent-1);
+      outline-offset: 2px;
+    }
+
+    /* === Inputs === */
+    .name-input {
+      width: 100%;
+      max-width: 400px;
+      padding: 1rem 1.5rem;
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      font-family: inherit;
+      font-weight: 600;
+      text-align: center;
+      color: var(--ink);
+      background-color: var(--paper);
+      border: 3px solid transparent;
+      border-radius: 16px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .name-input::placeholder {
+      color: var(--secondary);
+      font-weight: 400;
+    }
+
+    .name-input:focus {
+      border-color: var(--accent-1);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    /* === Name Chips === */
+    .name-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      min-height: 2rem;
+    }
+
+    .name-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--ink);
+      background-color: var(--primary-100);
+      border-radius: 40px;
+    }
+
+    .name-chip-remove {
+      background: none;
+      border: none;
+      color: var(--primary-400);
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .name-chip-remove:hover {
+      color: var(--accent-2);
+    }
+
+    /* === Spinner Screen === */
+    .spinner-prompt-box {
+      min-height: 9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+
+    .spinner-prompt {
+      font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.5;
+      max-width: 26ch;
+    }
+
+    .name-variable {
+      display: inline-block;
+      background-color: var(--accent-1);
+      color: var(--ink);
+      padding: 0.05em 0.45em;
+      border-radius: 8px;
+      border: 2px dashed var(--paper);
+      font-weight: 800;
+    }
+
+    .spinner-answer {
+      width: 100%;
+      max-width: 460px;
+      min-height: 70px;
+      padding: 0.8rem 1rem;
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      font-family: inherit;
+      font-weight: 500;
+      color: var(--ink);
+      background-color: var(--paper);
+      border: 3px solid transparent;
+      border-radius: 14px;
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.2s ease;
+    }
+
+    .spinner-answer::placeholder {
+      color: var(--secondary);
+      font-weight: 400;
+    }
+
+    .spinner-answer:focus {
+      border-color: var(--accent-1);
+    }
+
+    .spin-btn {
+      padding: 0.8rem 2rem;
+      font-size: clamp(1.1rem, 3vw, 1.3rem);
+      font-weight: 700;
+      color: #fff;
+      background-color: var(--accent-2);
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .spin-btn:hover {
+      background-color: #7a4542;
+      transform: scale(1.04);
+    }
+
+    .spin-btn:active {
+      background-color: #6a3a38;
+      transform: scale(0.98);
+    }
+
+    .spin-btn:focus-visible {
+      outline: 3px solid var(--paper);
+      outline-offset: 4px;
+    }
+
+    /* === Proposal Screen === */
+    .proposal-banner {
+      font-size: clamp(1.1rem, 3vw, 1.3rem);
+      font-weight: 600;
+      color: var(--ink);
+      background-color: var(--accent-1);
+      padding: 0.6rem 1.5rem;
+      border-radius: 40px;
+    }
+
+    .proposal-banner .name-variable {
+      border-color: var(--ink);
+    }
+
+    .inspiration-card {
+      width: 100%;
+      background-color: var(--primary-400);
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      text-align: left;
+    }
+
+    .inspiration-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-1);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+
+    .inspiration-prompt {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary-100);
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .inspiration-answer {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--paper);
+      line-height: 1.4;
+      font-style: italic;
+    }
+
+    .proposal-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .field-group {
+      text-align: left;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary-100);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      font-family: inherit;
+      font-weight: 500;
+      color: var(--ink);
+      background-color: var(--paper);
+      border: 3px solid transparent;
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .field-input:focus {
+      border-color: var(--accent-1);
+    }
+
+    textarea.field-input {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .field-input::placeholder {
+      color: var(--secondary);
+      font-weight: 400;
+    }
+
+    /* === Start Over link === */
+    .start-over {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      background: none;
+      border: none;
+      color: var(--primary-100);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      opacity: 0.6;
+      transition: opacity 0.2s ease, color 0.2s ease;
+      display: none;
+    }
+
+    .start-over:hover {
+      opacity: 1;
+      color: var(--paper);
+    }
+
+    .start-over.visible {
+      display: block;
+    }
+
+    /* === Thank You Screen === */
+    .thankyou-title {
+      font-size: clamp(2rem, 7vw, 3.5rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+    }
+
+    .thankyou-subtitle {
+      font-size: clamp(1.1rem, 3vw, 1.3rem);
+      font-weight: 500;
+      color: var(--paper);
+      opacity: 0.9;
+      max-width: 28ch;
+      line-height: 1.5;
+    }
+
+    .proposal-count-badge {
+      display: inline-block;
+      background-color: var(--accent-1);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+    }
+
+    /* === Fade transitions === */
+    .fade-in {
+      animation: fadeIn 0.35s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .prompt-fade {
+      animation: fadeIn 0.25s ease-out;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Start Over button (visible on all screens except landing) -->
+  <button class="start-over" id="start-over-btn">&#8592; Start Over</button>
+
+  <!-- ===== Landing Screen ===== -->
+  <div class="screen active" id="landing">
+    <h1>Idea Spinner</h1>
+    <p class="tagline">Dream up ideas for your community's budget</p>
+    <button class="btn pulse" id="start-btn">Let's Go!</button>
+  </div>
+
+  <!-- ===== Name Prompts Screen ===== -->
+  <div class="screen" id="names-screen">
+    <div class="step-dots" id="step-dots-names"></div>
+    <p class="step-label" id="name-step-label">Think of someone...</p>
+    <div class="prompt-box">
+      <p class="prompt-text" id="name-prompt-text"></p>
+    </div>
+    <button class="shuffle-btn" id="shuffle-btn-names">&#127922; Different prompt</button>
+    <input
+      type="text"
+      class="name-input"
+      id="name-input"
+      placeholder="First name"
+      autocomplete="off"
+    >
+    <div class="button-row" id="name-buttons"></div>
+    <div class="name-chips" id="name-chips"></div>
+  </div>
+
+  <!-- ===== Spinner Screen ===== -->
+  <div class="screen" id="spinner-screen">
+    <div class="step-dots" id="step-dots-spinner"></div>
+    <p class="step-label">What comes to mind?</p>
+    <button class="shuffle-btn" id="spin-btn">&#127922; Spin again</button>
+    <div class="spinner-prompt-box">
+      <p class="spinner-prompt" id="spinner-prompt"></p>
+    </div>
+    <textarea
+      class="spinner-answer"
+      id="spinner-answer"
+      placeholder="Your answer..."
+    ></textarea>
+    <div class="button-row">
+      <button class="btn" id="have-idea-btn">Turn This Into a Proposal</button>
+    </div>
+  </div>
+
+  <!-- ===== Proposal Screen ===== -->
+  <div class="screen" id="proposal-screen">
+    <div class="step-dots" id="step-dots-proposal"></div>
+    <div class="proposal-banner" id="proposal-banner"></div>
+    <div class="inspiration-card" id="inspiration-card">
+      <div class="inspiration-label">Your inspiration</div>
+      <div class="inspiration-prompt" id="inspiration-prompt"></div>
+      <div class="inspiration-answer" id="inspiration-answer"></div>
+    </div>
+    <div class="proposal-form">
+      <div class="field-group">
+        <label class="field-label" for="proposal-title">Title</label>
+        <input type="text" class="field-input" id="proposal-title" placeholder="Give your idea a name">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="proposal-money">What would we do with the money?</label>
+        <textarea class="field-input" id="proposal-money" placeholder="Describe how the funds would be used"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="proposal-why">Why is this needed?</label>
+        <textarea class="field-input" id="proposal-why" placeholder="Why does this matter for the community?"></textarea>
+      </div>
+    </div>
+    <div class="button-row">
+      <button class="btn" id="save-proposal-btn">Save Proposal</button>
+      <button class="btn-secondary" id="spin-more-btn">Spin More Ideas</button>
+    </div>
+  </div>
+
+  <!-- ===== Thank You Screen ===== -->
+  <div class="screen" id="thankyou-screen">
+    <div class="step-dots" id="step-dots-thankyou"></div>
+    <p class="thankyou-title">Nice one!</p>
+    <p class="thankyou-subtitle">Your proposal has been saved.</p>
+    <span class="proposal-count-badge" id="proposal-count-badge"></span>
+    <div class="button-row">
+      <button class="btn" id="spin-more-from-thankyou">Spin More Ideas</button>
+      <button class="btn-secondary" id="next-person-btn">Start Over</button>
+    </div>
+  </div>
+
+  <script>
+    // ---- App State ----
+    const state = {
+      names: [],
+      currentSpinName: '',
+      currentSpinPrompt: '',
+      proposals: [],
+      usedNamePrompts: [],
+      usedIdeaPrompts: []
+    };
+
+    const MAX_NAMES = 5;
+    const MIN_NAMES_BEFORE_SKIP = 2;
+    const APP_STEPS = ['names', 'spinner', 'proposal'];
+
+    // ---- Name Prompts Pool ----
+    const NAME_PROMPTS = [
+      "A friend or neighbor who is between jobs right now",
+      "Someone you know who has trouble getting around the city",
+      "A young person in your life who could use more opportunities",
+      "Someone in your community who is raising kids on their own",
+      "An older person you know who deserves better support",
+      "Someone who has had trouble finding affordable housing",
+      "A person you know who struggles to access healthcare",
+      "Someone in your neighborhood who could use a safer place to hang out",
+      "A friend who has a hard time affording groceries",
+      "Someone you know who would benefit from job training or classes",
+      "A person in your life who has trouble accessing childcare",
+      "Someone who relies on public services that could be better"
+    ];
+
+    // ---- Idea Prompts Pool ----
+    const IDEA_PROMPTS = [
+      "What is something [NAME] uses every day that needs to be fixed?",
+      "What would make [NAME]'s neighborhood feel safer?",
+      "What service would make [NAME]'s life a little easier?",
+      "If [NAME] had one wish for their community, what would it be?",
+      "What is something [NAME] needs but can't easily get to?",
+      "What would help [NAME] get to where they need to go?",
+      "What kind of program would help someone like [NAME] get ahead?",
+      "What public space could be improved for people like [NAME]?",
+      "What is one thing the city could do to help [NAME] right now?",
+      "What would make [NAME]'s daily routine less stressful?",
+      "What does [NAME] deserve that the community doesn't offer yet?",
+      "If you could build one thing for [NAME], what would it be?"
+    ];
+
+    const STEP_LABELS = [
+      "Think of someone...",
+      "Think of someone else...",
+      "Anyone else come to mind?",
+      "Keep going...",
+      "Last one!"
+    ];
+
+    // ---- Helpers ----
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const screen = document.getElementById(id);
+      screen.classList.add('active');
+      screen.classList.remove('fade-in');
+      void screen.offsetWidth;
+      screen.classList.add('fade-in');
+
+      // Show/hide the Start Over button
+      const startOverBtn = document.getElementById('start-over-btn');
+      if (id === 'landing') {
+        startOverBtn.classList.remove('visible');
+      } else {
+        startOverBtn.classList.add('visible');
+      }
+    }
+
+    function resetForNewParticipant() {
+      state.names = [];
+      state.currentSpinName = '';
+      state.currentSpinPrompt = '';
+      state.usedNamePrompts = [];
+      state.usedIdeaPrompts = [];
+      // proposals are kept — they belong to the whole session
+      showScreen('landing');
+    }
+
+    function renderStepDots(containerId, currentStep) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      const currentIdx = APP_STEPS.indexOf(currentStep);
+      APP_STEPS.forEach((step, i) => {
+        const dot = document.createElement('span');
+        dot.className = 'step-dot';
+        if (i < currentIdx) dot.classList.add('filled');
+        if (i === currentIdx) dot.classList.add('current');
+        container.appendChild(dot);
+      });
+    }
+
+    function pickFromPool(pool, usedList) {
+      const available = pool
+        .map((_, i) => i)
+        .filter(i => !usedList.includes(i));
+      if (available.length === 0) {
+        usedList.length = 0;
+        return pickFromPool(pool, usedList);
+      }
+      const pick = available[Math.floor(Math.random() * available.length)];
+      usedList.push(pick);
+      return pool[pick];
+    }
+
+    function pickRandomName() {
+      return state.names[Math.floor(Math.random() * state.names.length)];
+    }
+
+    // Build prompt HTML with name as highlighted variable
+    function renderSpinnerPrompt(raw, name) {
+      const promptEl = document.getElementById('spinner-prompt');
+      promptEl.innerHTML = '';
+      const parts = raw.split('[NAME]');
+      parts.forEach((part, i) => {
+        promptEl.appendChild(document.createTextNode(part));
+        if (i < parts.length - 1) {
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'name-variable';
+          nameSpan.textContent = name;
+          promptEl.appendChild(nameSpan);
+        }
+      });
+      promptEl.classList.remove('prompt-fade');
+      void promptEl.offsetWidth;
+      promptEl.classList.add('prompt-fade');
+    }
+
+    // ========================================
+    //  NAMES SCREEN
+    // ========================================
+
+    function renderNameChips() {
+      const container = document.getElementById('name-chips');
+      container.innerHTML = '';
+      state.names.forEach((name, i) => {
+        const chip = document.createElement('span');
+        chip.className = 'name-chip';
+        chip.textContent = name;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'name-chip-remove';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.setAttribute('aria-label', 'Remove ' + name);
+        removeBtn.addEventListener('click', () => {
+          state.names.splice(i, 1);
+          renderNameChips();
+          rebuildNameButtons();
+        });
+        chip.appendChild(removeBtn);
+        container.appendChild(chip);
+      });
+    }
+
+    function showNamePrompt() {
+      const nameCount = state.names.length;
+      const labelIdx = Math.min(nameCount, STEP_LABELS.length - 1);
+      document.getElementById('name-step-label').textContent = STEP_LABELS[labelIdx];
+
+      const promptText = pickFromPool(NAME_PROMPTS, state.usedNamePrompts);
+      const promptEl = document.getElementById('name-prompt-text');
+      promptEl.textContent = promptText;
+      promptEl.classList.remove('prompt-fade');
+      void promptEl.offsetWidth;
+      promptEl.classList.add('prompt-fade');
+
+      document.getElementById('name-input').value = '';
+      document.getElementById('name-input').focus();
+
+      renderStepDots('step-dots-names', 'names');
+      renderNameChips();
+      rebuildNameButtons();
+    }
+
+    function rebuildNameButtons() {
+      const row = document.getElementById('name-buttons');
+      row.innerHTML = '';
+
+      if (state.names.length < MAX_NAMES) {
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'btn';
+        nextBtn.textContent = state.names.length >= MAX_NAMES - 1 ? "Add & Finish" : "Add";
+        nextBtn.addEventListener('click', handleNameNext);
+        row.appendChild(nextBtn);
+      }
+
+      if (state.names.length >= MIN_NAMES_BEFORE_SKIP) {
+        const skipBtn = document.createElement('button');
+        skipBtn.className = 'btn-secondary';
+        skipBtn.textContent = "I'm Ready!";
+        skipBtn.addEventListener('click', goToSpinner);
+        row.appendChild(skipBtn);
+      }
+    }
+
+    function handleNameNext() {
+      const input = document.getElementById('name-input');
+      const name = input.value.trim();
+      if (!name) {
+        input.focus();
+        input.style.borderColor = 'var(--accent-2)';
+        setTimeout(() => { input.style.borderColor = 'transparent'; }, 800);
+        return;
+      }
+      state.names.push(name);
+      if (state.names.length >= MAX_NAMES) {
+        goToSpinner();
+        return;
+      }
+      showNamePrompt();
+    }
+
+    document.getElementById('shuffle-btn-names').addEventListener('click', function () {
+      const promptText = pickFromPool(NAME_PROMPTS, state.usedNamePrompts);
+      const promptEl = document.getElementById('name-prompt-text');
+      promptEl.textContent = promptText;
+      promptEl.classList.remove('prompt-fade');
+      void promptEl.offsetWidth;
+      promptEl.classList.add('prompt-fade');
+    });
+
+    // ========================================
+    //  SPINNER SCREEN
+    // ========================================
+
+    function goToSpinner() {
+      showScreen('spinner-screen');
+      spin();
+    }
+
+    function spin() {
+      const name = pickRandomName();
+      const raw = pickFromPool(IDEA_PROMPTS, state.usedIdeaPrompts);
+
+      state.currentSpinName = name;
+      state.currentSpinPrompt = raw;
+
+      renderSpinnerPrompt(raw, name);
+      document.getElementById('spinner-answer').value = '';
+      document.getElementById('spinner-answer').focus();
+      renderStepDots('step-dots-spinner', 'spinner');
+    }
+
+    document.getElementById('spin-btn').addEventListener('click', spin);
+
+    document.getElementById('have-idea-btn').addEventListener('click', function () {
+      const answer = document.getElementById('spinner-answer').value.trim();
+      const displayPrompt = state.currentSpinPrompt.replace(/\[NAME\]/g, state.currentSpinName);
+      goToProposal(state.currentSpinName, displayPrompt, answer);
+    });
+
+    // ========================================
+    //  PROPOSAL SCREEN
+    // ========================================
+
+    function goToProposal(name, prompt, answer) {
+      showScreen('proposal-screen');
+
+      // Banner
+      const banner = document.getElementById('proposal-banner');
+      banner.innerHTML = '';
+      banner.appendChild(document.createTextNode('Designing for people like '));
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'name-variable';
+      nameSpan.textContent = name;
+      banner.appendChild(nameSpan);
+
+      // Inspiration card
+      const inspirationCard = document.getElementById('inspiration-card');
+      const inspirationPrompt = document.getElementById('inspiration-prompt');
+      const inspirationAnswer = document.getElementById('inspiration-answer');
+
+      inspirationPrompt.textContent = prompt;
+
+      if (answer) {
+        inspirationAnswer.textContent = '"' + answer + '"';
+        inspirationCard.style.display = '';
+      } else {
+        inspirationAnswer.textContent = '';
+        // Still show the prompt they were looking at
+        inspirationCard.style.display = '';
+      }
+
+      // Clear form
+      document.getElementById('proposal-title').value = '';
+      document.getElementById('proposal-money').value = '';
+      document.getElementById('proposal-why').value = '';
+      document.getElementById('proposal-title').focus();
+
+      renderStepDots('step-dots-proposal', 'proposal');
+    }
+
+    document.getElementById('save-proposal-btn').addEventListener('click', function () {
+      const title = document.getElementById('proposal-title').value.trim();
+      const money = document.getElementById('proposal-money').value.trim();
+      const why = document.getElementById('proposal-why').value.trim();
+
+      if (!title) {
+        const el = document.getElementById('proposal-title');
+        el.focus();
+        el.style.borderColor = 'var(--accent-2)';
+        setTimeout(() => { el.style.borderColor = 'transparent'; }, 800);
+        return;
+      }
+
+      state.proposals.push({
+        name: state.currentSpinName,
+        title,
+        money,
+        why
+      });
+
+      goToThankYou();
+    });
+
+    document.getElementById('spin-more-btn').addEventListener('click', function () {
+      goToSpinner();
+    });
+
+    // ========================================
+    //  THANK YOU SCREEN
+    // ========================================
+
+    function goToThankYou() {
+      showScreen('thankyou-screen');
+      const count = state.proposals.length;
+      document.getElementById('proposal-count-badge').textContent =
+        count + ' proposal' + (count === 1 ? '' : 's') + ' saved this session';
+      renderStepDots('step-dots-thankyou', 'proposal');
+    }
+
+    document.getElementById('spin-more-from-thankyou').addEventListener('click', function () {
+      goToSpinner();
+    });
+
+    document.getElementById('next-person-btn').addEventListener('click', function () {
+      resetForNewParticipant();
+    });
+
+    // ========================================
+    //  START OVER (any screen)
+    // ========================================
+
+    document.getElementById('start-over-btn').addEventListener('click', function () {
+      resetForNewParticipant();
+    });
+
+    // ========================================
+    //  LANDING
+    // ========================================
+
+    document.getElementById('start-btn').addEventListener('click', function () {
+      showScreen('names-screen');
+      showNamePrompt();
+    });
+
+    document.getElementById('name-input').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') handleNameNext();
+    });
+  </script>
+</body>
+</html>
