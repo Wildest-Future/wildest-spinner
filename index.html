@@ -21,6 +21,11 @@
       --ink: #282413;
       --hover-teal: #193638;
       --active-teal: #112627;
+      --olive-hover: #5d6343;
+      --olive-active: #4d5336;
+      --accent-1-hover: #b8894a;
+      --accent-2-hover: #7a4542;
+      --accent-2-active: #6a3a38;
     }
 
     * {
@@ -87,12 +92,12 @@
     }
 
     .btn:hover {
-      background-color: #5d6343;
+      background-color: var(--olive-hover);
       transform: scale(1.04);
     }
 
     .btn:active {
-      background-color: #4d5336;
+      background-color: var(--olive-active);
       transform: scale(0.98);
     }
 
@@ -189,7 +194,7 @@
     .shuffle-btn {
       background: none;
       border: none;
-      color: var(--accent-1);
+      color: var(--primary-100);
       font-size: clamp(0.9rem, 2.5vw, 1rem);
       font-family: inherit;
       font-weight: 600;
@@ -205,7 +210,7 @@
     }
 
     .shuffle-btn:focus-visible {
-      outline: 2px solid var(--accent-1);
+      outline: 2px solid var(--primary-100);
       outline-offset: 2px;
     }
 
@@ -347,12 +352,12 @@
     }
 
     .spin-btn:hover {
-      background-color: #7a4542;
+      background-color: var(--accent-2-hover);
       transform: scale(1.04);
     }
 
     .spin-btn:active {
-      background-color: #6a3a38;
+      background-color: var(--accent-2-active);
       transform: scale(0.98);
     }
 
@@ -525,12 +530,792 @@
     .prompt-fade {
       animation: fadeIn 0.25s ease-out;
     }
+
+    /* === Proposal Indicator (floating pill) === */
+    .proposal-indicator {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      background-color: var(--accent-1);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.4rem 0.9rem;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.2s ease;
+      z-index: 10;
+    }
+
+    .proposal-indicator.visible {
+      display: flex;
+    }
+
+    .proposal-indicator:hover {
+      background-color: var(--accent-1-hover);
+      transform: scale(1.06);
+    }
+
+    .proposal-indicator:focus-visible {
+      outline: 3px solid var(--paper);
+      outline-offset: 4px;
+    }
+
+    /* === Review Screen === */
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .review-title {
+      font-size: clamp(2rem, 7vw, 3rem);
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .review-count {
+      display: inline-block;
+      background-color: var(--accent-1);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+    }
+
+    .review-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+    }
+
+    .review-card {
+      width: 100%;
+      background-color: var(--primary-400);
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      text-align: left;
+    }
+
+    .review-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .review-card-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--primary-100);
+      margin-bottom: 0.5rem;
+    }
+
+    .review-card-detail {
+      font-size: 0.9rem;
+      color: var(--paper);
+      line-height: 1.4;
+      margin-bottom: 0.35rem;
+    }
+
+    .review-card-detail-label {
+      font-weight: 600;
+      color: var(--accent-1);
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--primary-100);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--paper);
+    }
+
+    .back-btn:focus-visible {
+      outline: 2px solid var(--paper);
+      outline-offset: 2px;
+    }
+
+    /* === Review Card Checkbox === */
+    .review-card-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      width: 100%;
+    }
+
+    .review-card-check {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      margin-top: 1rem;
+      accent-color: var(--accent-1);
+      cursor: pointer;
+    }
+
+    .review-card-wrap .review-card {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* === Select All / Deselect All === */
+    .select-all-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100%;
+      font-size: 0.9rem;
+      color: var(--primary-100);
+    }
+
+    .select-all-row label {
+      cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .select-all-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-1);
+      cursor: pointer;
+    }
+
+    /* === Email Recipient Field === */
+    .email-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .email-row label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-100);
+      white-space: nowrap;
+    }
+
+    .email-input {
+      flex: 1;
+      padding: 0.5rem 0.8rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--ink);
+      background-color: var(--paper);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .email-input:focus {
+      border-color: var(--accent-1);
+    }
+
+    .email-input::placeholder {
+      color: var(--secondary);
+    }
+
+    /* === Export Toolbar === */
+    .export-toolbar {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      padding: 0.8rem 0;
+    }
+
+    .export-btn {
+      padding: 0.55rem 1.1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--paper);
+      background-color: var(--primary-300);
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
+    }
+
+    .export-btn:hover:not(:disabled) {
+      background-color: var(--accent-1);
+      color: var(--ink);
+      transform: scale(1.04);
+    }
+
+    .export-btn:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    .export-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .export-btn:focus-visible {
+      outline: 2px solid var(--paper);
+      outline-offset: 2px;
+    }
+
+    /* === Toast Notification === */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background-color: var(--olive-deep);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.6rem 1.5rem;
+      border-radius: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 100;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* === Settings === */
+    .settings-btn {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      background: none;
+      border: none;
+      color: var(--primary-100);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0.3rem;
+      border-radius: 6px;
+      opacity: 0.6;
+      transition: opacity 0.2s ease, color 0.2s ease;
+      display: none;
+      z-index: 10;
+    }
+
+    .settings-btn:hover {
+      opacity: 1;
+      color: var(--paper);
+    }
+
+    .settings-btn:focus-visible {
+      outline: 2px solid var(--paper);
+      outline-offset: 2px;
+    }
+
+    .settings-btn.visible {
+      display: block;
+    }
+
+    .settings-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 1rem;
+    }
+
+    .settings-overlay.visible {
+      display: flex;
+    }
+
+    .settings-panel {
+      background-color: var(--primary-400);
+      border-radius: 16px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .settings-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .settings-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      text-align: left;
+    }
+
+    .settings-field label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-100);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .settings-field input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: 500;
+      color: var(--ink);
+      background-color: var(--paper);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .settings-field input:focus {
+      border-color: var(--accent-1);
+    }
+
+    .settings-field input::placeholder {
+      color: var(--secondary);
+      font-weight: 400;
+    }
+
+    .settings-done-btn {
+      padding: 0.8rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: inherit;
+      color: #fff;
+      background-color: var(--olive-deep);
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+      align-self: center;
+    }
+
+    .settings-done-btn:hover {
+      background-color: var(--olive-hover);
+      transform: scale(1.04);
+    }
+
+    .settings-done-btn:active {
+      background-color: var(--olive-active);
+      transform: scale(0.98);
+    }
+
+    .settings-done-btn:focus-visible {
+      outline: 3px solid var(--paper);
+      outline-offset: 4px;
+    }
+
+    /* === Settings: Prompt Editor === */
+    .settings-section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 0.5rem;
+    }
+
+    .settings-helper {
+      font-size: 0.8rem;
+      color: var(--primary-100);
+      opacity: 0.8;
+      text-align: left;
+      line-height: 1.4;
+    }
+
+    .settings-prompt-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .settings-prompt-row {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .settings-prompt-input {
+      flex: 1;
+      padding: 0.5rem 0.7rem;
+      font-size: 0.85rem;
+      font-family: inherit;
+      font-weight: 500;
+      color: var(--ink);
+      background-color: var(--paper);
+      border: 2px solid transparent;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .settings-prompt-input:focus {
+      border-color: var(--accent-1);
+    }
+
+    .settings-prompt-delete {
+      background: none;
+      border: none;
+      color: var(--primary-100);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.2rem 0.4rem;
+      line-height: 1;
+      border-radius: 4px;
+      opacity: 0.6;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .settings-prompt-delete:hover {
+      opacity: 1;
+      color: var(--accent-2);
+    }
+
+    .settings-add-btn {
+      background: none;
+      border: 1px dashed var(--primary-100);
+      color: var(--primary-100);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+      align-self: flex-start;
+    }
+
+    .settings-add-btn:hover {
+      color: var(--paper);
+      border-color: var(--paper);
+    }
+
+    .settings-reset-btn {
+      background: none;
+      border: none;
+      color: var(--primary-100);
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.2rem 0;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+      align-self: flex-start;
+    }
+
+    .settings-reset-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    /* === Settings: Theme === */
+    .settings-color-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: left;
+    }
+
+    .settings-color-label {
+      flex: 1;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-100);
+    }
+
+    .settings-color-swatch {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 2px solid var(--primary-100);
+      border-radius: 6px;
+      cursor: pointer;
+      background: none;
+    }
+
+    .settings-color-swatch::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .settings-color-swatch::-webkit-color-swatch {
+      border: none;
+      border-radius: 4px;
+    }
+
+    .settings-color-swatch::-moz-color-swatch {
+      border: none;
+      border-radius: 4px;
+    }
+
+    .settings-color-hex {
+      width: 5.5rem;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.8rem;
+      font-family: monospace;
+      color: var(--ink);
+      background-color: var(--paper);
+      border: 2px solid transparent;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .settings-color-hex:focus {
+      border-color: var(--accent-1);
+    }
+
+    .settings-preset-row {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .settings-preset-name {
+      flex: 1;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.85rem;
+      font-family: inherit;
+      color: var(--ink);
+      background-color: var(--paper);
+      border: 2px solid transparent;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .settings-preset-name:focus {
+      border-color: var(--accent-1);
+    }
+
+    .settings-preset-save {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--ink);
+      background-color: var(--accent-1);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .settings-preset-save:hover {
+      background-color: var(--accent-1-hover);
+    }
+
+    .settings-preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .settings-preset-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--ink);
+      background-color: var(--primary-100);
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .settings-preset-chip:hover {
+      background-color: var(--paper);
+    }
+
+    .settings-preset-chip-delete {
+      background: none;
+      border: none;
+      color: var(--primary-400);
+      font-size: 0.9rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .settings-preset-chip-delete:hover {
+      color: var(--accent-2);
+    }
+
+    .settings-divider {
+      border: none;
+      border-top: 1px solid var(--primary-300);
+      margin: 0.3rem 0;
+    }
+
+    .settings-share-btn {
+      padding: 0.5rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--paper);
+      background-color: var(--primary-300);
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+      align-self: center;
+    }
+
+    .settings-share-btn:hover {
+      background-color: var(--accent-1);
+      color: var(--ink);
+      transform: scale(1.04);
+    }
+
+    .settings-share-btn:active {
+      transform: scale(0.97);
+    }
+
+    .settings-share-btn:focus-visible {
+      outline: 2px solid var(--paper);
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
 
+  <!-- Settings gear button (visible on landing only) -->
+  <button class="settings-btn" id="settings-btn" aria-label="Settings">&#9881;</button>
+
+  <!-- Settings overlay -->
+  <div class="settings-overlay" id="settings-overlay">
+    <div class="settings-panel">
+      <div class="settings-title">Settings</div>
+      <div class="settings-field">
+        <label for="settings-title-input">App Title</label>
+        <input type="text" id="settings-title-input" placeholder="Idea Spinner">
+      </div>
+
+      <hr class="settings-divider">
+
+      <!-- People Prompts -->
+      <div class="settings-section-title">People Prompts</div>
+      <div class="settings-helper">These prompts help participants think of someone in their community.</div>
+      <div class="settings-prompt-list" id="settings-name-prompts"></div>
+      <button class="settings-add-btn" id="settings-name-add">+ Add prompt</button>
+      <button class="settings-reset-btn" id="settings-name-reset">Reset to defaults</button>
+
+      <hr class="settings-divider">
+
+      <!-- Idea Prompts -->
+      <div class="settings-section-title">Idea Prompts</div>
+      <div class="settings-helper">Use [NAME] as a placeholder — it gets replaced with the participant's name.</div>
+      <div class="settings-prompt-list" id="settings-idea-prompts"></div>
+      <button class="settings-add-btn" id="settings-idea-add">+ Add prompt</button>
+      <button class="settings-reset-btn" id="settings-idea-reset">Reset to defaults</button>
+
+      <hr class="settings-divider">
+
+      <!-- Theme -->
+      <div class="settings-section-title">Theme</div>
+      <div class="settings-color-row">
+        <span class="settings-color-label">Background</span>
+        <input type="color" class="settings-color-swatch" id="theme-bg-swatch">
+        <input type="text" class="settings-color-hex" id="theme-bg-hex" placeholder="#224749">
+      </div>
+      <div class="settings-color-row">
+        <span class="settings-color-label">Text / Paper</span>
+        <input type="color" class="settings-color-swatch" id="theme-paper-swatch">
+        <input type="text" class="settings-color-hex" id="theme-paper-hex" placeholder="#FAF4DD">
+      </div>
+      <div class="settings-color-row">
+        <span class="settings-color-label">Accent</span>
+        <input type="color" class="settings-color-swatch" id="theme-accent-swatch">
+        <input type="text" class="settings-color-hex" id="theme-accent-hex" placeholder="#A67C52">
+      </div>
+      <div class="settings-color-row">
+        <span class="settings-color-label">Button</span>
+        <input type="color" class="settings-color-swatch" id="theme-button-swatch">
+        <input type="text" class="settings-color-hex" id="theme-button-hex" placeholder="#6E744F">
+      </div>
+      <div class="settings-preset-row">
+        <input type="text" class="settings-preset-name" id="theme-preset-name" placeholder="Preset name...">
+        <button class="settings-preset-save" id="theme-preset-save">Save</button>
+      </div>
+      <div class="settings-preset-chips" id="theme-preset-chips"></div>
+      <button class="settings-reset-btn" id="theme-reset">Reset to default</button>
+
+      <hr class="settings-divider">
+
+      <button class="settings-share-btn" id="settings-share-btn">Copy Share Link</button>
+
+      <button class="settings-done-btn" id="settings-done-btn">Done</button>
+    </div>
+  </div>
+
   <!-- Start Over button (visible on all screens except landing) -->
   <button class="start-over" id="start-over-btn">&#8592; Start Over</button>
+
+  <!-- Floating proposal counter -->
+  <button class="proposal-indicator" id="proposal-indicator">
+    <span id="proposal-indicator-count">0</span> &#128203;
+  </button>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== Review Screen ===== -->
+  <div class="screen" id="review-screen">
+    <div class="review-header">
+      <span class="review-title">Proposals</span>
+      <span class="review-count" id="review-count"></span>
+    </div>
+    <div class="select-all-row">
+      <input type="checkbox" id="select-all-check">
+      <label for="select-all-check" id="select-all-label">Select all</label>
+    </div>
+    <div class="review-list" id="review-list"></div>
+    <div class="email-row">
+      <label for="email-input">Email to:</label>
+      <input type="email" class="email-input" id="email-input" placeholder="recipient@example.com">
+    </div>
+    <div class="export-toolbar">
+      <button class="export-btn" id="export-copy" disabled>Copy</button>
+      <button class="export-btn" id="export-email" disabled>Email</button>
+      <button class="export-btn" id="export-csv" disabled>CSV</button>
+      <button class="export-btn" id="export-json" disabled>Decidim JSON</button>
+    </div>
+    <button class="back-btn" id="review-back-btn">&#8592; Back</button>
+  </div>
 
   <!-- ===== Landing Screen ===== -->
   <div class="screen active" id="landing">
@@ -624,6 +1409,7 @@
       currentSpinName: '',
       currentSpinPrompt: '',
       proposals: [],
+      previousScreen: 'landing',
       usedNamePrompts: [],
       usedIdeaPrompts: []
     };
@@ -672,6 +1458,372 @@
       "Last one!"
     ];
 
+    // ---- Settings ----
+    var DEFAULT_THEME = { bg: '#224749', paper: '#FAF4DD', accent: '#A67C52', button: '#6E744F' };
+
+    function getSettings() {
+      try {
+        return JSON.parse(localStorage.getItem('ideaspinner-settings')) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveSettingsObj(obj) {
+      localStorage.setItem('ideaspinner-settings', JSON.stringify(obj));
+    }
+
+    function getNamePrompts() {
+      return getSettings().namePrompts || NAME_PROMPTS;
+    }
+
+    function getIdeaPrompts() {
+      return getSettings().ideaPrompts || IDEA_PROMPTS;
+    }
+
+    // --- Color helpers ---
+    function hexToHSL(hex) {
+      hex = hex.replace('#', '');
+      var r = parseInt(hex.substring(0, 2), 16) / 255;
+      var g = parseInt(hex.substring(2, 4), 16) / 255;
+      var b = parseInt(hex.substring(4, 6), 16) / 255;
+      var max = Math.max(r, g, b), min = Math.min(r, g, b);
+      var h = 0, s = 0, l = (max + min) / 2;
+      if (max !== min) {
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+        else if (max === g) h = ((b - r) / d + 2) / 6;
+        else h = ((r - g) / d + 4) / 6;
+      }
+      return [h * 360, s * 100, l * 100];
+    }
+
+    function hslToHex(h, s, l) {
+      h /= 360; s /= 100; l /= 100;
+      var r, g, b;
+      if (s === 0) { r = g = b = l; } else {
+        function hue2rgb(p, q, t) {
+          if (t < 0) t += 1; if (t > 1) t -= 1;
+          if (t < 1/6) return p + (q - p) * 6 * t;
+          if (t < 1/2) return q;
+          if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+        }
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+      }
+      function toHex(c) { var v = Math.round(c * 255).toString(16); return v.length === 1 ? '0' + v : v; }
+      return '#' + toHex(r) + toHex(g) + toHex(b);
+    }
+
+    function adjustLightness(hex, amount) {
+      var hsl = hexToHSL(hex);
+      hsl[2] = Math.max(0, Math.min(100, hsl[2] + amount));
+      return hslToHex(hsl[0], hsl[1], hsl[2]);
+    }
+
+    function desaturate(hex, amount) {
+      var hsl = hexToHSL(hex);
+      hsl[1] = Math.max(0, Math.min(100, hsl[1] - amount));
+      hsl[2] = Math.max(0, Math.min(100, hsl[2] + 30));
+      return hslToHex(hsl[0], hsl[1], hsl[2]);
+    }
+
+    function luminance(hex) {
+      hex = hex.replace('#', '');
+      var r = parseInt(hex.substring(0, 2), 16) / 255;
+      var g = parseInt(hex.substring(2, 4), 16) / 255;
+      var b = parseInt(hex.substring(4, 6), 16) / 255;
+      return 0.299 * r + 0.587 * g + 0.114 * b;
+    }
+
+    function isValidHex(v) {
+      return /^#[0-9a-fA-F]{6}$/.test(v);
+    }
+
+    // --- Theme application ---
+    function applyTheme(theme) {
+      var root = document.documentElement.style;
+      if (!theme) {
+        // Reset to CSS defaults
+        var props = ['--primary-500','--primary-700','--primary-400','--primary-300','--primary-100',
+          '--paper','--stone','--accent-1','--accent-1-hover','--accent-2','--accent-2-hover','--accent-2-active',
+          '--olive-deep','--olive-hover','--olive-active','--ink','--secondary','--hover-teal','--active-teal'];
+        props.forEach(function(p) { root.removeProperty(p); });
+        return;
+      }
+      var bg = theme.bg || DEFAULT_THEME.bg;
+      var paper = theme.paper || DEFAULT_THEME.paper;
+      var accent = theme.accent || DEFAULT_THEME.accent;
+      var button = theme.button || DEFAULT_THEME.button;
+
+      root.setProperty('--primary-500', bg);
+      root.setProperty('--primary-700', adjustLightness(bg, -10));
+      root.setProperty('--primary-400', adjustLightness(bg, 6));
+      root.setProperty('--primary-300', adjustLightness(bg, 12));
+      root.setProperty('--primary-100', desaturate(bg, 30));
+      root.setProperty('--hover-teal', adjustLightness(bg, -5));
+      root.setProperty('--active-teal', adjustLightness(bg, -10));
+      root.setProperty('--paper', paper);
+      root.setProperty('--stone', adjustLightness(paper, -5));
+      root.setProperty('--accent-1', accent);
+      root.setProperty('--accent-1-hover', adjustLightness(accent, 8));
+      root.setProperty('--accent-2', adjustLightness(accent, -10));
+      root.setProperty('--accent-2-hover', adjustLightness(accent, -5));
+      root.setProperty('--accent-2-active', adjustLightness(accent, -15));
+      root.setProperty('--olive-deep', button);
+      root.setProperty('--olive-hover', adjustLightness(button, 8));
+      root.setProperty('--olive-active', adjustLightness(button, -5));
+      root.setProperty('--secondary', adjustLightness(button, 15));
+      root.setProperty('--ink', luminance(paper) > 0.5 ? '#282413' : '#f5f0e0');
+    }
+
+    function getTheme() {
+      return getSettings().theme || null;
+    }
+
+    function getSavedThemes() {
+      return getSettings().savedThemes || [];
+    }
+
+    // --- Prompt editor (generic) ---
+    function renderPromptEditor(containerId, prompts) {
+      var container = document.getElementById(containerId);
+      container.innerHTML = '';
+      prompts.forEach(function(text) {
+        addPromptRow(container, text);
+      });
+    }
+
+    function addPromptRow(container, text) {
+      var row = document.createElement('div');
+      row.className = 'settings-prompt-row';
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'settings-prompt-input';
+      input.value = text || '';
+      row.appendChild(input);
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'settings-prompt-delete';
+      del.innerHTML = '&times;';
+      del.addEventListener('click', function() { row.remove(); });
+      row.appendChild(del);
+      container.appendChild(row);
+      return input;
+    }
+
+    function readPromptEditor(containerId) {
+      var inputs = document.querySelectorAll('#' + containerId + ' .settings-prompt-input');
+      var result = [];
+      inputs.forEach(function(inp) {
+        var v = inp.value.trim();
+        if (v) result.push(v);
+      });
+      return result;
+    }
+
+    function arraysEqual(a, b) {
+      if (a.length !== b.length) return false;
+      for (var i = 0; i < a.length; i++) { if (a[i] !== b[i]) return false; }
+      return true;
+    }
+
+    // --- Theme color inputs sync ---
+    function syncColorInputs(swatchId, hexId) {
+      var swatch = document.getElementById(swatchId);
+      var hex = document.getElementById(hexId);
+      swatch.addEventListener('input', function() {
+        hex.value = swatch.value;
+        livePreviewTheme();
+      });
+      hex.addEventListener('input', function() {
+        var v = hex.value.trim();
+        if (!v.startsWith('#')) v = '#' + v;
+        if (isValidHex(v)) {
+          swatch.value = v;
+          livePreviewTheme();
+        }
+      });
+    }
+
+    function getThemeFromInputs() {
+      return {
+        bg: document.getElementById('theme-bg-swatch').value,
+        paper: document.getElementById('theme-paper-swatch').value,
+        accent: document.getElementById('theme-accent-swatch').value,
+        button: document.getElementById('theme-button-swatch').value
+      };
+    }
+
+    function setThemeInputs(theme) {
+      var t = theme || DEFAULT_THEME;
+      document.getElementById('theme-bg-swatch').value = t.bg;
+      document.getElementById('theme-bg-hex').value = t.bg;
+      document.getElementById('theme-paper-swatch').value = t.paper;
+      document.getElementById('theme-paper-hex').value = t.paper;
+      document.getElementById('theme-accent-swatch').value = t.accent;
+      document.getElementById('theme-accent-hex').value = t.accent;
+      document.getElementById('theme-button-swatch').value = t.button;
+      document.getElementById('theme-button-hex').value = t.button;
+    }
+
+    function livePreviewTheme() {
+      applyTheme(getThemeFromInputs());
+    }
+
+    function themeEquals(a, b) {
+      return a.bg === b.bg && a.paper === b.paper && a.accent === b.accent && a.button === b.button;
+    }
+
+    // --- Preset chips ---
+    function renderPresetChips() {
+      var container = document.getElementById('theme-preset-chips');
+      container.innerHTML = '';
+      var presets = getSavedThemes();
+      presets.forEach(function(preset, i) {
+        var chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'settings-preset-chip';
+        chip.textContent = preset.name;
+        chip.addEventListener('click', function() {
+          setThemeInputs(preset);
+          livePreviewTheme();
+        });
+        var del = document.createElement('button');
+        del.type = 'button';
+        del.className = 'settings-preset-chip-delete';
+        del.innerHTML = '&times;';
+        del.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var settings = getSettings();
+          settings.savedThemes = (settings.savedThemes || []).filter(function(_, idx) { return idx !== i; });
+          if (settings.savedThemes.length === 0) delete settings.savedThemes;
+          saveSettingsObj(settings);
+          renderPresetChips();
+        });
+        chip.appendChild(del);
+        container.appendChild(chip);
+      });
+    }
+
+    // --- Open / Close settings ---
+    function applySettings() {
+      var settings = getSettings();
+      var title = settings.title || 'Idea Spinner';
+      document.querySelector('#landing h1').textContent = title;
+      document.title = title;
+      applyTheme(getTheme());
+    }
+
+    function openSettings() {
+      var settings = getSettings();
+      // Title
+      document.getElementById('settings-title-input').value = settings.title || '';
+      // Prompt editors
+      renderPromptEditor('settings-name-prompts', getNamePrompts());
+      renderPromptEditor('settings-idea-prompts', getIdeaPrompts());
+      // Theme
+      setThemeInputs(getTheme());
+      renderPresetChips();
+      document.getElementById('theme-preset-name').value = '';
+      // Show
+      document.getElementById('settings-overlay').classList.add('visible');
+      document.getElementById('settings-title-input').focus();
+    }
+
+    function closeSettings() {
+      var settings = getSettings();
+
+      // Title
+      var titleVal = document.getElementById('settings-title-input').value.trim();
+      if (titleVal) { settings.title = titleVal; } else { delete settings.title; }
+
+      // Name prompts
+      var namePrompts = readPromptEditor('settings-name-prompts');
+      if (namePrompts.length > 0 && !arraysEqual(namePrompts, NAME_PROMPTS)) {
+        settings.namePrompts = namePrompts;
+      } else {
+        delete settings.namePrompts;
+      }
+
+      // Idea prompts
+      var ideaPrompts = readPromptEditor('settings-idea-prompts');
+      if (ideaPrompts.length > 0 && !arraysEqual(ideaPrompts, IDEA_PROMPTS)) {
+        settings.ideaPrompts = ideaPrompts;
+      } else {
+        delete settings.ideaPrompts;
+      }
+
+      // Theme
+      var theme = getThemeFromInputs();
+      if (!themeEquals(theme, DEFAULT_THEME)) {
+        settings.theme = theme;
+      } else {
+        delete settings.theme;
+      }
+
+      saveSettingsObj(settings);
+      applySettings();
+      // Reset used prompt trackers so new prompts take effect
+      state.usedNamePrompts = [];
+      state.usedIdeaPrompts = [];
+      document.getElementById('settings-overlay').classList.remove('visible');
+    }
+
+    document.getElementById('settings-btn').addEventListener('click', openSettings);
+    document.getElementById('settings-done-btn').addEventListener('click', closeSettings);
+
+    // Prompt editor add buttons
+    document.getElementById('settings-name-add').addEventListener('click', function() {
+      var inp = addPromptRow(document.getElementById('settings-name-prompts'), '');
+      inp.focus();
+    });
+    document.getElementById('settings-idea-add').addEventListener('click', function() {
+      var inp = addPromptRow(document.getElementById('settings-idea-prompts'), '');
+      inp.focus();
+    });
+
+    // Prompt editor reset buttons
+    document.getElementById('settings-name-reset').addEventListener('click', function() {
+      renderPromptEditor('settings-name-prompts', NAME_PROMPTS);
+    });
+    document.getElementById('settings-idea-reset').addEventListener('click', function() {
+      renderPromptEditor('settings-idea-prompts', IDEA_PROMPTS);
+    });
+
+    // Color input sync
+    syncColorInputs('theme-bg-swatch', 'theme-bg-hex');
+    syncColorInputs('theme-paper-swatch', 'theme-paper-hex');
+    syncColorInputs('theme-accent-swatch', 'theme-accent-hex');
+    syncColorInputs('theme-button-swatch', 'theme-button-hex');
+
+    // Theme reset
+    document.getElementById('theme-reset').addEventListener('click', function() {
+      setThemeInputs(DEFAULT_THEME);
+      livePreviewTheme();
+    });
+
+    // Save preset
+    document.getElementById('theme-preset-save').addEventListener('click', function() {
+      var name = document.getElementById('theme-preset-name').value.trim();
+      if (!name) {
+        document.getElementById('theme-preset-name').focus();
+        return;
+      }
+      var theme = getThemeFromInputs();
+      var settings = getSettings();
+      if (!settings.savedThemes) settings.savedThemes = [];
+      settings.savedThemes.push({ name: name, bg: theme.bg, paper: theme.paper, accent: theme.accent, button: theme.button });
+      saveSettingsObj(settings);
+      document.getElementById('theme-preset-name').value = '';
+      renderPresetChips();
+    });
+
     // ---- Helpers ----
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -681,13 +1833,23 @@
       void screen.offsetWidth;
       screen.classList.add('fade-in');
 
-      // Show/hide the Start Over button
+      // Show/hide the Start Over button (hidden on landing and review)
       const startOverBtn = document.getElementById('start-over-btn');
-      if (id === 'landing') {
+      if (id === 'landing' || id === 'review-screen') {
         startOverBtn.classList.remove('visible');
       } else {
         startOverBtn.classList.add('visible');
       }
+
+      // Show gear icon only on landing
+      const settingsBtn = document.getElementById('settings-btn');
+      if (id === 'landing') {
+        settingsBtn.classList.add('visible');
+      } else {
+        settingsBtn.classList.remove('visible');
+      }
+
+      renderProposalIndicator();
     }
 
     function resetForNewParticipant() {
@@ -750,6 +1912,247 @@
     }
 
     // ========================================
+    //  PROPOSAL INDICATOR + REVIEW SCREEN
+    // ========================================
+
+    function renderProposalIndicator() {
+      const indicator = document.getElementById('proposal-indicator');
+      const countEl = document.getElementById('proposal-indicator-count');
+      const count = state.proposals.length;
+      if (count > 0) {
+        countEl.textContent = count;
+        indicator.classList.add('visible');
+      } else {
+        indicator.classList.remove('visible');
+      }
+    }
+
+    function goToReview() {
+      // Remember which screen we came from
+      const current = document.querySelector('.screen.active');
+      if (current) {
+        state.previousScreen = current.id;
+      }
+      showScreen('review-screen');
+      renderReviewCards();
+    }
+
+    function renderReviewCards() {
+      const list = document.getElementById('review-list');
+      const countEl = document.getElementById('review-count');
+      list.innerHTML = '';
+      countEl.textContent = state.proposals.length;
+
+      // Pre-fill email from localStorage
+      const emailInput = document.getElementById('email-input');
+      const savedEmail = localStorage.getItem('ideaspinner-email');
+      if (savedEmail && !emailInput.value) emailInput.value = savedEmail;
+
+      state.proposals.forEach(function (p, i) {
+        const wrap = document.createElement('div');
+        wrap.className = 'review-card-wrap';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'review-card-check';
+        checkbox.dataset.index = i;
+        checkbox.checked = true;
+        checkbox.addEventListener('change', updateExportState);
+        wrap.appendChild(checkbox);
+
+        const card = document.createElement('div');
+        card.className = 'review-card';
+
+        const title = document.createElement('div');
+        title.className = 'review-card-title';
+        title.textContent = p.title;
+        card.appendChild(title);
+
+        const nameRow = document.createElement('div');
+        nameRow.className = 'review-card-name';
+        nameRow.innerHTML = 'Designed for people like <span class="name-variable">' +
+          p.name.replace(/</g, '&lt;') + '</span>';
+        card.appendChild(nameRow);
+
+        if (p.money) {
+          const money = document.createElement('div');
+          money.className = 'review-card-detail';
+          money.innerHTML = '<span class="review-card-detail-label">What would we do with the money?</span> ' +
+            p.money.replace(/</g, '&lt;');
+          card.appendChild(money);
+        }
+
+        if (p.why) {
+          const why = document.createElement('div');
+          why.className = 'review-card-detail';
+          why.innerHTML = '<span class="review-card-detail-label">Why is this needed?</span> ' +
+            p.why.replace(/</g, '&lt;');
+          card.appendChild(why);
+        }
+
+        wrap.appendChild(card);
+        list.appendChild(wrap);
+      });
+
+      // Set select-all to checked initially
+      document.getElementById('select-all-check').checked = true;
+      updateExportState();
+    }
+
+    // ========================================
+    //  EXPORT HELPERS
+    // ========================================
+
+    function getSelectedProposals() {
+      const checks = document.querySelectorAll('.review-card-check');
+      var selected = [];
+      checks.forEach(function (cb) {
+        if (cb.checked) selected.push(state.proposals[parseInt(cb.dataset.index)]);
+      });
+      return selected;
+    }
+
+    function updateExportState() {
+      var selected = getSelectedProposals();
+      var hasSelection = selected.length > 0;
+      document.getElementById('export-copy').disabled = !hasSelection;
+      document.getElementById('export-email').disabled = !hasSelection;
+      document.getElementById('export-csv').disabled = !hasSelection;
+      document.getElementById('export-json').disabled = !hasSelection;
+
+      // Update select-all checkbox state
+      var allChecks = document.querySelectorAll('.review-card-check');
+      var allChecked = allChecks.length > 0 && selected.length === allChecks.length;
+      var selectAllEl = document.getElementById('select-all-check');
+      selectAllEl.checked = allChecked;
+      selectAllEl.indeterminate = selected.length > 0 && !allChecked;
+      document.getElementById('select-all-label').textContent =
+        allChecked ? 'Deselect all' : 'Select all';
+    }
+
+    // Select all / deselect all
+    document.getElementById('select-all-check').addEventListener('change', function () {
+      var checked = this.checked;
+      document.querySelectorAll('.review-card-check').forEach(function (cb) {
+        cb.checked = checked;
+      });
+      updateExportState();
+    });
+
+    function formatProposalBody(p) {
+      var parts = [];
+      if (p.money) parts.push(p.money);
+      if (p.why) parts.push(p.why);
+      return parts.join('\n\n');
+    }
+
+    function formatAsPlainText(proposals) {
+      return proposals.map(function (p) {
+        return 'Title: ' + p.title +
+          '\n\n' + formatProposalBody(p);
+      }).join('\n\n---\n\n');
+    }
+
+    function showToast(message) {
+      var toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('visible');
+      setTimeout(function () { toast.classList.remove('visible'); }, 2000);
+    }
+
+    function csvEscape(val) {
+      if (/[",\n\r]/.test(val)) return '"' + val.replace(/"/g, '""') + '"';
+      return val;
+    }
+
+    function downloadBlob(blob, filename) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // --- Copy to clipboard ---
+    document.getElementById('export-copy').addEventListener('click', function () {
+      var selected = getSelectedProposals();
+      if (!selected.length) return;
+      var text = formatAsPlainText(selected);
+      navigator.clipboard.writeText(text).then(function () {
+        showToast('Copied!');
+      }, function () {
+        showToast('Copy failed — try again');
+      });
+    });
+
+    // --- Email ---
+    document.getElementById('export-email').addEventListener('click', function () {
+      var selected = getSelectedProposals();
+      if (!selected.length) return;
+      var emailInput = document.getElementById('email-input');
+      var recipient = emailInput.value.trim();
+      // Save for next session
+      if (recipient) localStorage.setItem('ideaspinner-email', recipient);
+
+      var subject = encodeURIComponent('Idea Spinner Proposals');
+      var intro = 'Here are the proposals from our Idea Spinner session:\n\n';
+      var body = encodeURIComponent(intro + formatAsPlainText(selected));
+      window.location.href = 'mailto:' + encodeURIComponent(recipient) +
+        '?subject=' + subject + '&body=' + body;
+    });
+
+    // --- CSV ---
+    document.getElementById('export-csv').addEventListener('click', function () {
+      var selected = getSelectedProposals();
+      if (!selected.length) return;
+      var rows = ['Title,Description'];
+      selected.forEach(function (p) {
+        rows.push(
+          csvEscape(p.title) + ',' +
+          csvEscape(formatProposalBody(p))
+        );
+      });
+      var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+      downloadBlob(blob, 'idea-spinner-proposals.csv');
+    });
+
+    // --- Decidim JSON ---
+    document.getElementById('export-json').addEventListener('click', function () {
+      var selected = getSelectedProposals();
+      if (!selected.length) return;
+      var data = selected.map(function (p) {
+        return {
+          'title/en': p.title,
+          'body/en': formatProposalBody(p),
+          'scope/id': '',
+          'category/id': ''
+        };
+      });
+      var json = JSON.stringify(data, null, 2);
+      var blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+      downloadBlob(blob, 'idea-spinner-decidim.json');
+    });
+
+    // --- Save email on input ---
+    document.getElementById('email-input').addEventListener('change', function () {
+      var val = this.value.trim();
+      if (val) localStorage.setItem('ideaspinner-email', val);
+    });
+
+    document.getElementById('proposal-indicator').addEventListener('click', function () {
+      const current = document.querySelector('.screen.active');
+      if (current && current.id === 'review-screen') return;
+      goToReview();
+    });
+
+    document.getElementById('review-back-btn').addEventListener('click', function () {
+      showScreen(state.previousScreen);
+    });
+
+    // ========================================
     //  NAMES SCREEN
     // ========================================
 
@@ -767,8 +2170,12 @@
         removeBtn.setAttribute('aria-label', 'Remove ' + name);
         removeBtn.addEventListener('click', () => {
           state.names.splice(i, 1);
-          renderNameChips();
-          rebuildNameButtons();
+          if (state.names.length < MIN_NAMES_BEFORE_SKIP) {
+            showNamePrompt();
+          } else {
+            renderNameChips();
+            rebuildNameButtons();
+          }
         });
         chip.appendChild(removeBtn);
         container.appendChild(chip);
@@ -776,11 +2183,16 @@
     }
 
     function showNamePrompt() {
+      // Ensure prompt area is visible (may be hidden by showReadyToSpin)
+      document.getElementById('name-input').style.display = '';
+      document.getElementById('name-prompt-text').parentElement.style.display = '';
+      document.getElementById('shuffle-btn-names').style.display = '';
+
       const nameCount = state.names.length;
       const labelIdx = Math.min(nameCount, STEP_LABELS.length - 1);
       document.getElementById('name-step-label').textContent = STEP_LABELS[labelIdx];
 
-      const promptText = pickFromPool(NAME_PROMPTS, state.usedNamePrompts);
+      const promptText = pickFromPool(getNamePrompts(), state.usedNamePrompts);
       const promptEl = document.getElementById('name-prompt-text');
       promptEl.textContent = promptText;
       promptEl.classList.remove('prompt-fade');
@@ -798,21 +2210,40 @@
     function rebuildNameButtons() {
       const row = document.getElementById('name-buttons');
       row.innerHTML = '';
-
-      if (state.names.length < MAX_NAMES) {
-        const nextBtn = document.createElement('button');
-        nextBtn.className = 'btn';
-        nextBtn.textContent = state.names.length >= MAX_NAMES - 1 ? "Add & Finish" : "Add";
-        nextBtn.addEventListener('click', handleNameNext);
-        row.appendChild(nextBtn);
-      }
+      const inputVisible = document.getElementById('name-input').style.display !== 'none';
 
       if (state.names.length >= MIN_NAMES_BEFORE_SKIP) {
-        const skipBtn = document.createElement('button');
-        skipBtn.className = 'btn-secondary';
-        skipBtn.textContent = "I'm Ready!";
-        skipBtn.addEventListener('click', goToSpinner);
-        row.appendChild(skipBtn);
+        // "I'm Ready!" is always the primary action after 2 names
+        const readyBtn = document.createElement('button');
+        readyBtn.className = 'btn';
+        readyBtn.textContent = "I'm Ready!";
+        readyBtn.addEventListener('click', goToSpinner);
+        row.appendChild(readyBtn);
+
+        if (inputVisible && state.names.length < MAX_NAMES) {
+          // Prompt is showing — provide an "Add" button to submit the name
+          const addBtn = document.createElement('button');
+          addBtn.className = 'btn-secondary';
+          addBtn.textContent = state.names.length >= MAX_NAMES - 1 ? "Add & Finish" : "Add";
+          addBtn.addEventListener('click', handleNameNext);
+          row.appendChild(addBtn);
+        } else if (!inputVisible && state.names.length < MAX_NAMES) {
+          // Ready state — offer to add more
+          const moreBtn = document.createElement('button');
+          moreBtn.className = 'btn-secondary';
+          moreBtn.textContent = 'Add more people';
+          moreBtn.addEventListener('click', showNamePrompt);
+          row.appendChild(moreBtn);
+        }
+      } else {
+        // Fewer than 2 names — "Add" is the only action
+        if (state.names.length < MAX_NAMES) {
+          const nextBtn = document.createElement('button');
+          nextBtn.className = 'btn';
+          nextBtn.textContent = "Add";
+          nextBtn.addEventListener('click', handleNameNext);
+          row.appendChild(nextBtn);
+        }
       }
     }
 
@@ -830,11 +2261,25 @@
         goToSpinner();
         return;
       }
+      if (state.names.length >= MIN_NAMES_BEFORE_SKIP) {
+        showReadyToSpin();
+        return;
+      }
       showNamePrompt();
     }
 
+    function showReadyToSpin() {
+      document.getElementById('name-input').style.display = 'none';
+      document.getElementById('name-prompt-text').parentElement.style.display = 'none';
+      document.getElementById('shuffle-btn-names').style.display = 'none';
+      document.getElementById('name-step-label').textContent = state.names.length + ' people added';
+      renderStepDots('step-dots-names', 'names');
+      renderNameChips();
+      rebuildNameButtons();
+    }
+
     document.getElementById('shuffle-btn-names').addEventListener('click', function () {
-      const promptText = pickFromPool(NAME_PROMPTS, state.usedNamePrompts);
+      const promptText = pickFromPool(getNamePrompts(), state.usedNamePrompts);
       const promptEl = document.getElementById('name-prompt-text');
       promptEl.textContent = promptText;
       promptEl.classList.remove('prompt-fade');
@@ -853,7 +2298,7 @@
 
     function spin() {
       const name = pickRandomName();
-      const raw = pickFromPool(IDEA_PROMPTS, state.usedIdeaPrompts);
+      const raw = pickFromPool(getIdeaPrompts(), state.usedIdeaPrompts);
 
       state.currentSpinName = name;
       state.currentSpinPrompt = raw;
@@ -950,6 +2395,7 @@
       document.getElementById('proposal-count-badge').textContent =
         count + ' proposal' + (count === 1 ? '' : 's') + ' saved this session';
       renderStepDots('step-dots-thankyou', 'proposal');
+      renderProposalIndicator();
     }
 
     document.getElementById('spin-more-from-thankyou').addEventListener('click', function () {
@@ -980,6 +2426,53 @@
     document.getElementById('name-input').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') handleNameNext();
     });
+
+    // ---- Share / Import settings via URL ----
+    document.getElementById('settings-share-btn').addEventListener('click', function() {
+      // Save current form state first
+      closeSettings();
+      var settings = getSettings();
+      // Only share if there's something custom
+      var keys = Object.keys(settings);
+      if (keys.length === 0) {
+        showToast('Nothing to share — using defaults');
+        openSettings();
+        return;
+      }
+      var json = JSON.stringify(settings);
+      var encoded = btoa(unescape(encodeURIComponent(json)));
+      var base = window.location.href.split('?')[0].split('#')[0];
+      var url = base + '?config=' + encoded;
+      navigator.clipboard.writeText(url).then(function() {
+        showToast('Share link copied!');
+      }, function() {
+        // Fallback: show URL in prompt
+        prompt('Copy this share link:', url);
+      });
+    });
+
+    function importSettingsFromURL() {
+      var params = new URLSearchParams(window.location.search);
+      var config = params.get('config');
+      if (!config) return;
+      try {
+        var json = decodeURIComponent(escape(atob(config)));
+        var imported = JSON.parse(json);
+        if (typeof imported === 'object' && imported !== null) {
+          saveSettingsObj(imported);
+          // Clean the URL so it doesn't re-import on reload
+          var cleanUrl = window.location.href.split('?')[0].split('#')[0];
+          try { window.history.replaceState({}, '', cleanUrl); } catch(e) { /* file:// may block this */ }
+        }
+      } catch (e) {
+        // Invalid config param — ignore silently
+      }
+    }
+
+    // ---- Init ----
+    importSettingsFromURL();
+    applySettings();
+    document.getElementById('settings-btn').classList.add('visible');
   </script>
 </body>
 </html>
